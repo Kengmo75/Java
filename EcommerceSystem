@@ -1,3 +1,114 @@
 This java code creates a simple Ecommerce System for an online store.
+The online store has three entities, product and customers belong to the com.ecommerce package while orders belongs to a com.ecommerce.orders package
+The Main java combines all packages and runs returning the OrderID, Customer Name and TotalAmount purchased
 
-https://replit.com/@kengmojennifer/EcommerceSystemsjava?v=1
+
+package com.ecommerce;
+public class Product {
+    private int productID;
+    private String name;
+    private double price;
+    public Product(int productID, String name, double price) {
+        this.productID = productID;
+        this.name = name;
+        this.price = price;
+    }
+    public int getProductID() {
+        return productID;
+    }
+    public String getName() {
+        return name;
+    }
+    public double getPrice() {
+        return price;
+    }
+    public void displayProductInfo() {
+        System.out.println("Product ID: " + productID + ", Name: " + name + ", Price: $" + price);
+    }
+}
+
+package com.ecommerce;
+import java.util.ArrayList;
+import java.util.List;
+public class Customer {
+    private int customerID;
+    private String name;
+    private List<Product> cart;
+    public Customer(int customerID, String name) {
+        this.customerID = customerID;
+        this.name = name;
+        this.cart = new ArrayList<>();
+    }
+    public void addProductToCart(Product product) {
+        cart.add(product);
+    }
+    public void removeProductFromCart(Product product) {
+        cart.remove(product);
+    }
+    public List<Product> getCart() {
+        return cart;
+    }
+    // Getters and Setters
+    public int getCustomerID() {
+        return customerID;
+    }
+    public String getName() {
+        return name;
+    }
+    public double calculateTotalCost() {
+        double total = 0;
+        for (Product product : cart) {
+            total += product.getPrice();
+        }
+        return total;
+    }
+}
+
+package com.ecommerce.orders;
+import com.ecommerce.Customer;
+import com.ecommerce.Product;
+import java.util.List;
+public class Order {
+    private int orderID;
+    private Customer customer;
+    private List<Product> products;
+    private double orderTotal;
+    public Order(int orderID, Customer customer, List<Product> products) {
+        this.orderID = orderID;
+        this.customer = customer;
+        this.products = products;
+        this.orderTotal = calculateOrderTotal();
+    }
+    private double calculateOrderTotal() {
+        double total = 0;
+        for (Product product : products) {
+            total += product.getPrice();
+        }
+        return total;
+    }
+    public String generateOrderSummary() {
+        return "Order ID: " + orderID + "\nCustomer: " + customer.getName() + 
+               "\nTotal: $" + orderTotal;
+    }
+}
+
+import com.ecommerce.Product;
+import com.ecommerce.Customer;
+import com.ecommerce.orders.Order;
+import java.util.List;
+public class Main {
+    public static void main(String[] args) {
+        // Create some products
+        Product product1 = new Product(1, "Laptop", 1000);
+        Product product2 = new Product(2, "Phone", 500);
+        // Create a customer
+        Customer customer = new Customer(101, "Alice");
+        // Add products to cart
+        customer.addProductToCart(product1);
+        customer.addProductToCart(product2);
+        // Create an order
+        Order order = new Order(1001, customer, customer.getCart());
+        // Generate order summary
+        System.out.println(order.generateOrderSummary());
+    }
+}
